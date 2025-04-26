@@ -1,25 +1,56 @@
 import 'package:flutter/material.dart';
 
+enum InputFormType { normal, password }
+
 class TextInputField extends StatefulWidget {
-  final String labelText; // Menambahkan parameter untuk label
-  final String hintText; // Menambahkan parameter untuk hint
-  final bool
-  isPasswordField; // Menambahkan parameter untuk menentukan apakah field adalah password
+  final TextEditingController controller;
+  final String labelText;
+  final String hintText;
+  final bool isPasswordField;
+  final bool isObscure;
+  final Function()? onObscureTap;
+  final InputFormType inputFormType;
+  final String? Function(String?)? validator;
 
   const TextInputField({
     super.key,
-    required this.labelText, // Memastikan parameter labelText diisi saat pembuatan widget
-    required this.hintText, // Memastikan parameter hintText diisi saat pembuatan widget
-    this.isPasswordField = false, // Default ke false jika bukan password
-  });
+    required this.controller,
+    required this.labelText,
+    required this.hintText,
+    this.isPasswordField = false,
+    this.validator,
+  }) : inputFormType = InputFormType.normal,
+       isObscure = false,
+       onObscureTap = null;
+
+  const TextInputField.password({
+    super.key,
+    required this.controller,
+    required this.labelText,
+    required this.hintText,
+    this.isObscure = true,
+    this.onObscureTap,
+    this.isPasswordField = true,
+    this.validator,
+  }) : inputFormType = InputFormType.password;
+
+  const TextInputField.email({
+    super.key,
+    required this.controller,
+    required this.labelText,
+    required this.hintText,
+    this.isPasswordField = false,
+    this.validator,
+  }) : inputFormType = InputFormType.normal,
+       isObscure = false,
+       onObscureTap = null;
 
   @override
   _TextInputFieldState createState() => _TextInputFieldState();
 }
 
 class _TextInputFieldState extends State<TextInputField> {
-  bool _isObscure =
-      true; // Untuk mengontrol apakah teks password disembunyikan atau tidak
+  bool _isObscure = true;
 
   @override
   Widget build(BuildContext context) {
@@ -27,15 +58,17 @@ class _TextInputFieldState extends State<TextInputField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          widget.labelText, // Menggunakan parameter labelText
+          widget.labelText,
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
         ),
         SizedBox(height: 7),
         TextFormField(
-          obscureText:
-              widget.isPasswordField
-                  ? _isObscure
-                  : false, // Mengatur apakah teks disembunyikan (hanya jika field adalah password)
+          controller: widget.controller,
+          obscureText: widget.isPasswordField ? _isObscure : false,
+          keyboardType:
+              widget.inputFormType == InputFormType.normal
+                  ? TextInputType.emailAddress
+                  : TextInputType.text,
           decoration: InputDecoration(
             hintText: widget.hintText, // Menggunakan parameter hintText
             labelStyle: TextStyle(color: Colors.grey),
@@ -50,14 +83,17 @@ class _TextInputFieldState extends State<TextInputField> {
                         _isObscure ? Icons.visibility : Icons.visibility_off,
                         color: Color(0xFF3355FF),
                       ),
-                      onPressed: () {
-                        setState(() {
-                          _isObscure = !_isObscure; // Toggle visibility
-                        });
-                      },
+                      onPressed:
+                          widget.onObscureTap ??
+                          () {
+                            setState(() {
+                              _isObscure = !_isObscure; // Toggle visibility
+                            });
+                          },
                     )
                     : null,
           ),
+          validator: widget.validator,
         ),
       ],
     );

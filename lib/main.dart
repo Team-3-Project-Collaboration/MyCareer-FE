@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:mycareer_fe/src/core/presentation/login/forgot_pass/confirm_email_page.dart';
-import 'package:mycareer_fe/src/core/presentation/login/forgot_pass/new_password_page.dart';
-import 'package:mycareer_fe/src/core/presentation/login/forgot_pass/verification_code_page.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mycareer_fe/src/core/presentation/login/sign_in/sign_in_page.dart';
+import 'package:mycareer_fe/src/routes/app_routes.dart';
 
-void main() {
+void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final router = ref.read(goRouterProvider);
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: NewPasswordPage(),
+      home: SignInPage(),
     );
   }
 }
