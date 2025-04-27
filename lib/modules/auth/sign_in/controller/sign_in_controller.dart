@@ -62,11 +62,11 @@ class SignInController extends GetxController {
         // Menampilkan pesan sukses
         Get.snackbar("Login Successful", "Welcome back, ${data['email']}");
       } else {
-        // Jika login gagal
+
         Get.snackbar("Login Failed", "Invalid email or password");
       }
     } catch (e) {
-      // Tangani kesalahan jaringan atau lainnya
+
       Get.snackbar("Error", "Something went wrong. Please try again.");
     }
   }

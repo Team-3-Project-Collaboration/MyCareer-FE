@@ -93,12 +93,15 @@ class HomePage extends StatelessWidget {
                             ),
                           ],
                         ),
-                        IconButton(
-                            icon : const Icon(Icons.notifications_outlined),
+                        CircleAvatar(
+                          backgroundColor: Colors.white,
+                          child: IconButton(
+                            icon: const Icon(Icons.notifications_outlined),
                             onPressed: () {
                               Get.toNamed(NavigationRoutes.notification);
                             },
                           ),
+                        ),
                       ],
                     ),
                   ],
