@@ -67,7 +67,7 @@ class SignInPage extends StatelessWidget {
               text: 'Masuk',
               buttonColor: const Color(0xFF3355FF),
               onPressed: () {
-                // Call sign-in logic
+                controller.signIn();
               },
             ),
             SizedBox(height: 20),
@@ -88,7 +88,7 @@ class SignInPage extends StatelessWidget {
               buttonColor: Colors.white,
               leadingSvg: "assets/svgs/logo_google.svg",
               onPressed: () {
-                Get.toNamed(NavigationRoutes.mainMenu);
+                // Get.toNamed(NavigationRoutes.mainMenu);
               },
             ),
             SizedBox(

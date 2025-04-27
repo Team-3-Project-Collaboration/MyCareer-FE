@@ -1,5 +1,9 @@
+import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:mycareer/core/services/endpoints.dart';
+import 'package:mycareer/core/utils/route_utils.dart';
 
 class SignInController extends GetxController {
   var emailController = TextEditingController();
@@ -24,5 +28,46 @@ class SignInController extends GetxController {
     isObscure.value = !isObscure.value;
   }
 
-  // Add other functions for sign-in logic if needed.
+  Future<void> signIn() async {
+    final email = emailController.text;
+    final password = passwordController.text;
+
+    // Validasi input
+    if (email.isEmpty || password.isEmpty) {
+      Get.snackbar("Error", "Email or password cannot be empty");
+      return;
+    }
+
+    // Kirim request login
+    try {
+      final response = await http.post(
+        Uri.parse(
+          Endpoints.login,
+        ),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'email': email, 'password': password}),
+      );
+
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+        final data = responseData['data'];
+
+        // Simpan token dan data lainnya
+        String token = data['token'];
+        String role = data['role'];
+
+        // Navigasi ke halaman berikutnya
+        Get.offNamed(NavigationRoutes.mainMenu);
+
+        // Menampilkan pesan sukses
+        Get.snackbar("Login Successful", "Welcome back, ${data['email']}");
+      } else {
+        // Jika login gagal
+        Get.snackbar("Login Failed", "Invalid email or password");
+      }
+    } catch (e) {
+      // Tangani kesalahan jaringan atau lainnya
+      Get.snackbar("Error", "Something went wrong. Please try again.");
+    }
+  }
 }
