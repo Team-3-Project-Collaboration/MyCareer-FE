@@ -8,6 +8,8 @@ import 'package:mycareer/modules/homepage/homepage/homepage_screen.dart';
 import 'package:mycareer/modules/homepage/notification/notification_screen.dart';
 import 'package:mycareer/modules/main/main_menu.dart';
 import 'package:mycareer/modules/onboarding/onboarding_page.dart';
+import 'package:mycareer/modules/personalization/pages/personal_data_page.dart';
+import 'package:mycareer/modules/skillquest/pages/skillquest_page.dart';
 import 'package:mycareer/modules/splash_screen/splash_page.dart';
 
 class NavigationRoutes {
@@ -21,6 +23,12 @@ class NavigationRoutes {
   static const String homepage = '/homepage';
   static const String notification = '/notification';
   static const String mainMenu = '/main-menu';
+  static const String careerPath = '/career-path';
+  static const String careerHub = '/career-hub';
+  static const String careerBot = '/career-bot';
+  static const String profile = '/profile';
+  static const String skillQuest = '/skill-quest';
+  static const String personalization = '/personalization';
 
   static final List<GetPage> routes = [
     GetPage(name: initial, page: () => const SplashPage()),
@@ -33,5 +41,7 @@ class NavigationRoutes {
     GetPage(name: homepage, page: () => const HomePage()),
     GetPage(name: notification, page: () => const NotificationPage()),
     GetPage(name: mainMenu, page: () => const MainMenuScreen()),
+    GetPage(name: skillQuest, page: () => const SkillQuestPage()),
+    GetPage(name: personalization, page: () => const PersonalDataPage()),
   ];
 }

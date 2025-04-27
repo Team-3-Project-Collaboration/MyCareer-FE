@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:get/get.dart';
+import 'package:mycareer/core/utils/route_utils.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -13,25 +15,25 @@ class HomePage extends StatelessWidget {
         'title': 'Temukan pekerjaan baru yang lebih tepat!',
         'gradient': const [Color(0xFFF89047), Color(0xFFFFF07B)],
         'textColor': const Color(0xFFBA2A42),
-        'imageUrl': 'https://picsum.photos/106/100?random=12',
+        'imageUrl': 'assets/svgs/star.png',
       },
       {
         'title': 'Tingkatkan keterampilan untuk karir masa depan',
         'gradient': const [Color(0xFF3355FF), Color(0xFF88A1FF)],
         'textColor': Colors.white,
-        'imageUrl': 'https://picsum.photos/106/100?random=13',
+        'imageUrl': 'assets/svgs/star.png',
       },
       {
         'title': 'Konsultasi karir dengan ahli industri',
         'gradient': const [Color(0xFF25C06D), Color(0xFFA5F5C6)],
         'textColor': const Color(0xFF116438),
-        'imageUrl': 'https://picsum.photos/106/100?random=14',
+        'imageUrl': 'assets/svgs/star.png',
       },
       {
         'title': 'Dapatkan tawaran pekerjaan terbaik minggu ini',
         'gradient': const [Color(0xFFFF6B6B), Color(0xFFFFBBBB)],
         'textColor': Colors.white,
-        'imageUrl': 'https://picsum.photos/106/100?random=15',
+        'imageUrl': 'assets/svgs/star.png',
       },
     ];
 
@@ -60,18 +62,18 @@ class HomePage extends StatelessWidget {
             ),
 
             // Status bar and app bar
-            const SafeArea(
+            SafeArea(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     // Welcome message
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Column(
+                        const Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
@@ -91,14 +93,12 @@ class HomePage extends StatelessWidget {
                             ),
                           ],
                         ),
-                        CircleAvatar(
-                          backgroundColor: Color(0xFFF6F8FF),
-                          radius: 24,
-                          child: Icon(
-                            Icons.notifications_outlined,
-                            color: Color(0xFF3355FF),
+                        IconButton(
+                            icon : const Icon(Icons.notifications_outlined),
+                            onPressed: () {
+                              Get.toNamed(NavigationRoutes.notification);
+                            },
                           ),
-                        ),
                       ],
                     ),
                   ],
@@ -176,7 +176,7 @@ class HomePage extends StatelessWidget {
                                               borderRadius:
                                                   BorderRadius.circular(10),
                                               image: DecorationImage(
-                                                image: NetworkImage(
+                                                image: AssetImage(
                                                   item['imageUrl'],
                                                 ),
                                                 fit: BoxFit.cover,
@@ -259,18 +259,30 @@ class HomePage extends StatelessWidget {
                           _buildFeatureItem(
                             'assets/svgs/homepage-skill-quest.svg',
                             'SkillQuest',
+                            () {
+                              Get.toNamed(NavigationRoutes.skillQuest);
+                            },
                           ),
                           _buildFeatureItem(
                             'assets/svgs/homepage-counsel.svg',
                             'Counsel',
+                            () {
+                              // Get.toNamed(NavigationRoutes.skillQuest);
+                            },
                           ),
                           _buildFeatureItem(
                             'assets/svgs/homepage-job-pulse.svg',
                             'JobPulse',
+                            () {
+                              // Get.toNamed(NavigationRoutes.skillQuest);
+                            },
                           ),
                           _buildFeatureItem(
                             'assets/svgs/homepage-job-trend.svg',
                             'JobTrend',
+                            () {
+                              // Get.toNamed(NavigationRoutes.skillQuest);
+                            },
                           ),
                         ],
                       ),
@@ -321,7 +333,7 @@ class HomePage extends StatelessWidget {
                           // Job Cards
                           const SizedBox(height: 16),
                           _buildJobCard(
-                            logoUrl: 'https://picsum.photos/48/48?random=1',
+                            logoUrl: 'assets/svgs/gojek.png',
                             company: 'Gojek',
                             title: 'Software Engineer',
                             salary: 'IDR 10,000K',
@@ -329,7 +341,7 @@ class HomePage extends StatelessWidget {
                           ),
                           const SizedBox(height: 16),
                           _buildJobCard(
-                            logoUrl: 'https://picsum.photos/48/48?random=2',
+                            logoUrl: 'assets/svgs/traveloka.png',
                             company: 'Traveloka',
                             title: 'IT Project Manager',
                             salary: '\$40000',
@@ -337,7 +349,7 @@ class HomePage extends StatelessWidget {
                           ),
                           const SizedBox(height: 16),
                           _buildJobCard(
-                            logoUrl: 'https://picsum.photos/48/48?random=3',
+                            logoUrl: 'assets/svgs/tokopedia.png',
                             company: 'Tokopedia',
                             title: 'UI/UX Designer',
                             salary: 'IDR 12,000K',
@@ -359,37 +371,44 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildFeatureItem(String svgAssetPath, String label) {
-    return Column(
-      children: [
-        Container(
-          width: 68,
-          height: 68,
-          decoration: BoxDecoration(
-            color: const Color(0xFFF6F8FF),
-            borderRadius: BorderRadius.circular(99),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(14),
-            child: SvgPicture.asset(
-              svgAssetPath,
-              colorFilter: const ColorFilter.mode(
-                Color(0xFF3355FF),
-                BlendMode.srcIn,
+Widget _buildFeatureItem(
+    String svgAssetPath,
+    String label,
+    VoidCallback onTap,
+  ) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        children: [
+          Container(
+            width: 68,
+            height: 68,
+            decoration: BoxDecoration(
+              color: const Color(0xFFF6F8FF),
+              borderRadius: BorderRadius.circular(99),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(14),
+              child: SvgPicture.asset(
+                svgAssetPath,
+                colorFilter: const ColorFilter.mode(
+                  Color(0xFF3355FF),
+                  BlendMode.srcIn,
+                ),
               ),
             ),
           ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            color: Color(0xFF262626),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: Color(0xFF262626),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -441,7 +460,7 @@ class HomePage extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(6),
               image: DecorationImage(
-                image: NetworkImage(logoUrl),
+                image: AssetImage(logoUrl),
                 fit: BoxFit.cover,
               ),
             ),
