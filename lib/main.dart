@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mycareer_fe/src/core/presentation/login/sign_in/sign_in_page.dart';
-import 'package:mycareer_fe/src/routes/app_routes.dart';
+import 'src/core/presentation/personalization/pages/personal_data_page.dart';
 
-void main() async {
+void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends ConsumerWidget {
-  const MyApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final router = ref.read(goRouterProvider);
+  Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Personalization Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: SignInPage(),
+      home: PersonalDataPage(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
