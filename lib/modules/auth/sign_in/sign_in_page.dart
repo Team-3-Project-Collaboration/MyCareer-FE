@@ -88,7 +88,7 @@ class SignInPage extends StatelessWidget {
               buttonColor: Colors.white,
               leadingSvg: "assets/svgs/logo_google.svg",
               onPressed: () {
-                // Call Google login logic
+                Get.toNamed(NavigationRoutes.mainMenu);
               },
             ),
             SizedBox(
