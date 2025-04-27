@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mycareer_fe/src/core/presentation/login/sign_in/sign_in_controller.dart';
 import 'package:mycareer_fe/src/core/presentation/login/widget/account_status_text.dart';
 import 'package:mycareer_fe/src/core/presentation/login/widget/button_login.dart';
 import 'package:mycareer_fe/src/core/presentation/login/widget/text_input_field.dart';
 
-class ConfirmEmailPage extends StatelessWidget {
+class ConfirmEmailPage extends ConsumerWidget {
   const ConfirmEmailPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(signInControllerProvider);
+    final controller = ref.read(signInControllerProvider.notifier);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -42,6 +46,8 @@ class ConfirmEmailPage extends StatelessWidget {
                           TextInputField(
                             hintText: "Masukkan email Anda",
                             labelText: "Email",
+                            validator: controller.validateEmail,
+                            controller: controller.emailController,
                           ),
                           SizedBox(height: 64),
                           CustomButtonLogin(

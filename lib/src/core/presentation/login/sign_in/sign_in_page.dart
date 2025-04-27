@@ -1,19 +1,33 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mycareer_fe/src/constants/constants.dart';
+import 'package:mycareer_fe/src/core/presentation/login/sign_in/sign_in_controller.dart';
 import 'package:mycareer_fe/src/core/presentation/login/widget/account_status_text.dart';
 import 'package:mycareer_fe/src/core/presentation/login/widget/button_login.dart';
 import 'package:mycareer_fe/src/core/presentation/login/widget/text_input_field.dart';
+import 'package:mycareer_fe/src/network/network_exceptions.dart';
+import 'package:mycareer_fe/src/widgets/snack_bar_widget.dart';
 
-class SignInPage extends StatefulWidget {
+class SignInPage extends ConsumerWidget {
   const SignInPage({super.key});
 
   @override
-  _SignInPageState createState() => _SignInPageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen(signInControllerProvider, (prevState, state) {
+      if (prevState?.loginValue != state.loginValue) {
+        state.loginValue.whenOrNull(
+          error: (error, stackTrace) {
+            final message = NetworkExceptions.getErrorMessage(
+              error as NetworkExceptions,
+            );
+            appSnackBar(context, ColorApp.red500, message);
+          },
+        );
+      }
+    });
 
-class _SignInPageState extends State<SignInPage> {
-  @override
-  Widget build(BuildContext context) {
+    final state = ref.watch(signInControllerProvider);
+    final controller = ref.read(signInControllerProvider.notifier);
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
@@ -30,12 +44,20 @@ class _SignInPageState extends State<SignInPage> {
               style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
             ),
             SizedBox(height: 32),
-            TextInputField(hintText: "Masukkan email Anda", labelText: "Email"),
-            SizedBox(height: 8),
             TextInputField(
+              hintText: "Masukkan email Anda",
+              labelText: "Email",
+              validator: controller.validateEmail,
+              controller: controller.emailController,
+            ),
+            SizedBox(height: 8),
+            TextInputField.password(
               hintText: "Masukkan password",
               labelText: "Password",
               isPasswordField: true,
+              validator: controller.validatePassword,
+              isObscure: state.isObscure,
+              controller: controller.passwordController,
             ),
             Align(
               alignment: Alignment.centerRight,

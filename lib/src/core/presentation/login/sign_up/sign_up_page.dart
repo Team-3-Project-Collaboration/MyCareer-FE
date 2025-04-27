@@ -1,19 +1,17 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mycareer_fe/src/core/presentation/login/sign_in/sign_in_controller.dart';
 import 'package:mycareer_fe/src/core/presentation/login/widget/account_status_text.dart';
 import 'package:mycareer_fe/src/core/presentation/login/widget/button_login.dart';
 import 'package:mycareer_fe/src/core/presentation/login/widget/text_input_field.dart';
 
-class SignUpPage extends StatefulWidget {
+class SignUpPage extends ConsumerWidget {
   const SignUpPage({super.key});
 
   @override
-  State<SignUpPage> createState() => _SignUpPageState();
-}
-
-class _SignUpPageState extends State<SignUpPage> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(signInControllerProvider);
+    final controller = ref.read(signInControllerProvider.notifier);
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
@@ -30,14 +28,27 @@ class _SignUpPageState extends State<SignUpPage> {
               style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
             ),
             SizedBox(height: 32),
-            TextInputField(hintText: "Masukkan nama Anda", labelText: "Nama"),
-            SizedBox(height: 8),
-            TextInputField(hintText: "Masukkan email Anda", labelText: "Email"),
+            TextInputField(
+              hintText: "Masukkan nama Anda",
+              labelText: "Namal",
+              validator: controller.validateEmail,
+              controller: controller.emailController,
+            ),
             SizedBox(height: 8),
             TextInputField(
+              hintText: "Masukkan email Anda",
+              labelText: "Email",
+              validator: controller.validateEmail,
+              controller: controller.emailController,
+            ),
+            SizedBox(height: 8),
+            TextInputField.password(
               hintText: "Masukkan password",
               labelText: "Password",
               isPasswordField: true,
+              validator: controller.validatePassword,
+              isObscure: state.isObscure,
+              controller: controller.passwordController,
             ),
             SizedBox(height: 31),
             CustomButtonLogin(

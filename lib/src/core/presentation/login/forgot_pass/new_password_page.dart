@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mycareer_fe/src/core/presentation/login/sign_in/sign_in_controller.dart';
 import 'package:mycareer_fe/src/core/presentation/login/widget/account_status_text.dart';
 import 'package:mycareer_fe/src/core/presentation/login/widget/button_login.dart';
 import 'package:mycareer_fe/src/core/presentation/login/widget/text_input_field.dart';
 
-class NewPasswordPage extends StatelessWidget {
+class NewPasswordPage extends ConsumerWidget {
   const NewPasswordPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(signInControllerProvider);
+    final controller = ref.read(signInControllerProvider.notifier);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -62,16 +66,22 @@ class NewPasswordPage extends StatelessWidget {
                             ),
                           ),
                           SizedBox(height: 24),
-                          TextInputField(
+                          TextInputField.password(
                             hintText: "Masukkan password",
                             labelText: "Password Baru",
                             isPasswordField: true,
+                            validator: controller.validatePassword,
+                            isObscure: state.isObscure,
+                            controller: controller.passwordController,
                           ),
                           SizedBox(height: 16),
-                          TextInputField(
+                          TextInputField.password(
                             hintText: "Masukkan password",
-                            labelText: "Konfirmasi Password ",
+                            labelText: "Konfirmasi Password",
                             isPasswordField: true,
+                            validator: controller.validatePassword,
+                            isObscure: state.isObscure,
+                            controller: controller.passwordController,
                           ),
                           SizedBox(height: 46),
                           CustomButtonLogin(
